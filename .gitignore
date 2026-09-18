@@ -1,0 +1,7 @@
+protected_folder/
+quarantine/
+incidents/
+live_status.json
+__pycache__/
+*.pyc
+.venv/

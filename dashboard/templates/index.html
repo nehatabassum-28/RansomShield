@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>RansomShield | Ransomware Detection</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #080b12;
+            color: #f1f5f9;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1400px;
+            margin: auto;
+            padding: 25px 0 50px;
+        }
+
+        /* HEADER */
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 20px 25px;
+            background: #101620;
+            border: 1px solid #1e293b;
+            border-radius: 15px;
+        }
+
+        .logo h1 {
+            font-size: 30px;
+            letter-spacing: 1px;
+        }
+
+        .logo p {
+            color: #94a3b8;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 12px #22c55e;
+        }
+
+        /* THREAT BANNER */
+
+        .threat-banner {
+            background: #111827;
+            border: 1px solid #334155;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 22px;
+        }
+
+        .threat-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .threat-subtitle {
+            color: #94a3b8;
+        }
+
+        /* RISK */
+
+        .risk-panel {
+            background: #101620;
+            border: 1px solid #1e293b;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 22px;
+        }
+
+        .risk-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .risk-header span {
+            font-size: 24px;
+        }
+
+        .risk-bar {
+            width: 100%;
+            height: 20px;
+            background: #1e293b;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .risk-fill {
+            width: 0%;
+            height: 100%;
+            background: #22c55e;
+            transition: width 0.5s ease;
+        }
+
+        /* CARDS */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 22px;
+        }
+
+        .card {
+            background: #101620;
+            border: 1px solid #1e293b;
+            border-radius: 15px;
+            padding: 22px;
+        }
+
+        .card-title {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .value {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        /* GRID */
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+            margin-bottom: 22px;
+        }
+
+        .panel {
+            background: #101620;
+            border: 1px solid #1e293b;
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .panel h2 {
+            font-size: 19px;
+            margin-bottom: 18px;
+        }
+
+        /* REASONS */
+
+        .reason {
+            background: #18202c;
+            border-left: 4px solid #ef4444;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 7px;
+            color: #e2e8f0;
+        }
+
+        .safe {
+            border-left-color: #22c55e;
+        }
+
+        /* RESPONSE */
+
+        .response {
+            padding: 18px;
+            background: #18202c;
+            border-radius: 10px;
+            border: 1px solid #334155;
+        }
+
+        .response-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        /* FILES */
+
+        .files {
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
+        .file {
+            padding: 8px 0;
+            border-bottom: 1px solid #1e293b;
+            color: #cbd5e1;
+            font-size: 13px;
+        }
+
+        /* TIMELINE */
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 15px 8px;
+            background: #18202c;
+            border-radius: 10px;
+            border: 1px solid #334155;
+        }
+
+        .step-number {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .step p {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        /* INCIDENT */
+
+        .incident-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .info-box {
+            background: #18202c;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .info-label {
+            color: #94a3b8;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-weight: bold;
+            word-break: break-word;
+        }
+
+        footer {
+            text-align: center;
+            color: #64748b;
+            margin-top: 30px;
+            font-size: 13px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 900px) {
+
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 550px) {
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .incident-info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+
+    <header>
+
+        <div class="logo">
+            <h1>🛡️ RansomShield</h1>
+            <p>Behavior-Based Ransomware Detection & Response</p>
+        </div>
+
+        <div class="status">
+            <div class="status-dot" id="statusDot"></div>
+            <span id="systemStatus">MONITORING</span>
+        </div>
+
+    </header>
+
+
+    <!-- THREAT BANNER -->
+
+    <section class="threat-banner">
+
+        <div class="threat-title" id="threatTitle">
+            🟢 SYSTEM PROTECTED
+        </div>
+
+        <div class="threat-subtitle" id="threatSubtitle">
+            RansomShield is monitoring the protected folder for suspicious behavior.
+        </div>
+
+    </section>
+
+
+    <!-- RISK PANEL -->
+
+    <section class="risk-panel">
+
+        <div class="risk-header">
+
+            <span>Risk Score</span>
+
+            <span id="riskScore">
+                0/100
+            </span>
+
+        </div>
+
+        <div class="risk-bar">
+
+            <div
+                class="risk-fill"
+                id="riskFill">
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ACTIVITY CARDS -->
+
+    <section class="cards">
+
+        <div class="card">
+
+            <div class="card-title">
+                Risk Score
+            </div>
+
+            <div class="value" id="cardRisk">
+                0/100
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                File Modifications
+            </div>
+
+            <div class="value" id="cardModifications">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                File Renames
+            </div>
+
+            <div class="value" id="cardRenames">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                Extension Changes
+            </div>
+
+            <div class="value" id="cardExtensions">
+                0
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- MAIN GRID -->
+
+    <section class="grid">
+
+
+        <!-- DETECTION REASONS -->
+
+        <div class="panel">
+
+            <h2>
+                🧠 Detection Analysis
+            </h2>
+
+            <div id="reasons">
+
+                <div class="reason safe">
+                    No suspicious behavior detected.
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESPONSE -->
+
+        <div class="panel">
+
+            <h2>
+                🛡️ Response Status
+            </h2>
+
+            <div class="response">
+
+                <div
+                    class="response-title"
+                    id="responseTitle">
+                    System Monitoring
+                </div>
+
+                <div id="responseText">
+                    RansomShield is actively monitoring the protected environment.
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- INCIDENT -->
+
+    <section class="panel">
+
+        <h2>
+            🚨 Latest Incident
+        </h2>
+
+        <div
+            class="incident-info"
+            id="incidentInfo">
+
+            <div class="info-box">
+
+                <div class="info-label">
+                    Incident ID
+                </div>
+
+                <div class="info-value">
+                    No incident
+                </div>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <div class="info-label">
+                    Status
+                </div>
+
+                <div class="info-value">
+                    MONITORING
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <br>
+
+
+    <!-- AFFECTED FILES -->
+
+    <section class="panel">
+
+        <h2>
+            📁 Affected Files
+        </h2>
+
+        <div
+            class="files"
+            id="affectedFiles">
+
+            <div class="file">
+                No affected files detected.
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <br>
+
+
+    <!-- ATTACK TIMELINE -->
+
+    <section class="panel">
+
+        <h2>
+            🕒 Attack Detection Timeline
+        </h2>
+
+        <div class="timeline">
+
+            <div
+                class="step"
+                id="timelineNormal">
+
+                <div class="step-number">
+                    1
+                </div>
+
+                <strong>
+                    Normal
+                </strong>
+
+                <p>
+                    Normal file activity
+                </p>
+
+            </div>
+
+
+            <div
+                class="step"
+                id="timelineSuspicious">
+
+                <div class="step-number">
+                    2
+                </div>
+
+                <strong>
+                    Suspicious
+                </strong>
+
+                <p>
+                    Activity increases
+                </p>
+
+            </div>
+
+
+            <div
+                class="step"
+                id="timelineCritical">
+
+                <div class="step-number">
+                    3
+                </div>
+
+                <strong>
+                    Critical
+                </strong>
+
+                <p>
+                    Ransomware-like behavior
+                </p>
+
+            </div>
+
+
+            <div
+                class="step"
+                id="timelineProtection">
+
+                <div class="step-number">
+                    4
+                </div>
+
+                <strong>
+                    Protection
+                </strong>
+
+                <p>
+                    Incident response activated
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- INCIDENT HISTORY -->
+
+<section class="panel">
+
+    <h2>
+        📋 Incident History
+    </h2>
+
+    {% if incidents %}
+
+    <div style="overflow-x:auto;">
+
+        <table style="
+            width:100%;
+            border-collapse:collapse;
+            margin-top:15px;
+        ">
+
+            <thead>
+
+                <tr style="
+                    text-align:left;
+                    border-bottom:1px solid #334155;
+                ">
+
+                    <th style="padding:12px;">
+                        Incident ID
+                    </th>
+
+                    <th style="padding:12px;">
+                        Risk
+                    </th>
+
+                    <th style="padding:12px;">
+                        Severity
+                    </th>
+
+                    <th style="padding:12px;">
+                        Time
+                    </th>
+
+                    <th style="padding:12px;">
+                        Response
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for incident in incidents %}
+
+                <tr style="
+                    border-bottom:1px solid #1e293b;
+                ">
+
+                    <td style="padding:12px;">
+                        {{ incident.incident_id }}
+                    </td>
+
+                    <td style="
+                        padding:12px;
+                        font-weight:bold;
+                    ">
+                        {{ incident.risk_score }}/100
+                    </td>
+
+                    <td style="padding:12px;">
+                        {{ incident.severity }}
+                    </td>
+
+                    <td style="padding:12px;">
+                        {{ incident.timestamp }}
+                    </td>
+
+                    <td style="
+                        padding:12px;
+                        font-weight:bold;
+                    ">
+                        🛡️ PROTECTED
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+    <div class="reason safe">
+
+        🟢 No security incidents recorded yet.
+
+    </div>
+
+    {% endif %}
+
+</section>
+
+<br>
+
+    <footer>
+
+        RansomShield — Controlled Cybersecurity Demonstration
+
+    </footer>
+
+</div>
+
+
+<script>
+
+    async function updateDashboard() {
+
+        try {
+
+            const response =
+                await fetch("/live");
+
+            const data =
+                await response.json();
+
+
+            const score =
+                Number(data.risk_score || 0);
+
+            const status =
+                data.status || "MONITORING";
+
+
+            /* -------------------------
+               BASIC STATUS
+            ------------------------- */
+
+            document.getElementById(
+                "systemStatus"
+            ).textContent = status;
+
+
+            document.getElementById(
+                "riskScore"
+            ).textContent =
+                score + "/100";
+
+
+            document.getElementById(
+                "cardRisk"
+            ).textContent =
+                score + "/100";
+
+
+            document.getElementById(
+                "riskFill"
+            ).style.width =
+                score + "%";
+
+
+            /* -------------------------
+               THREAT BANNER
+            ------------------------- */
+
+            const title =
+                document.getElementById(
+                    "threatTitle"
+                );
+
+            const subtitle =
+                document.getElementById(
+                    "threatSubtitle"
+                );
+
+
+            if (status === "CRITICAL") {
+
+                title.textContent =
+                    "🚨 RANSOMWARE-LIKE ACTIVITY DETECTED";
+
+                subtitle.textContent =
+                    "Critical behavioral patterns detected. Protection Mode has been activated.";
+
+            }
+
+            else if (status === "SUSPICIOUS") {
+
+                title.textContent =
+                    "⚠️ SUSPICIOUS ACTIVITY DETECTED";
+
+                subtitle.textContent =
+                    "RansomShield has detected unusual file activity.";
+
+            }
+
+            else {
+
+                title.textContent =
+                    "🟢 SYSTEM PROTECTED";
+
+                subtitle.textContent =
+                    "RansomShield is monitoring the protected folder for suspicious behavior.";
+
+            }
+
+
+            /* -------------------------
+               ACTIVITY COUNTS
+            ------------------------- */
+
+            let modifications = 0;
+            let renames = 0;
+            let extensions = 0;
+
+
+            for (
+                const reason of data.reasons || []
+            ) {
+
+                if (
+                    reason.includes(
+                        "Rapid file modifications"
+                    )
+                ) {
+
+                    const match =
+                        reason.match(/\d+/);
+
+                    if (match)
+                        modifications =
+                            Number(match[0]);
+
+                }
+
+
+                if (
+                    reason.includes(
+                        "Mass file renaming"
+                    )
+                ) {
+
+                    const match =
+                        reason.match(/\d+/);
+
+                    if (match)
+                        renames =
+                            Number(match[0]);
+
+                }
+
+
+                if (
+                    reason.includes(
+                        "Multiple extension changes"
+                    )
+                ) {
+
+                    const match =
+                        reason.match(/\d+/);
+
+                    if (match)
+                        extensions =
+                            Number(match[0]);
+
+                }
+
+            }
+
+
+            document.getElementById(
+                "cardModifications"
+            ).textContent =
+                modifications;
+
+
+            document.getElementById(
+                "cardRenames"
+            ).textContent =
+                renames;
+
+
+            document.getElementById(
+                "cardExtensions"
+            ).textContent =
+                extensions;
+
+
+            /* -------------------------
+               DETECTION REASONS
+            ------------------------- */
+
+            const reasonsBox =
+                document.getElementById(
+                    "reasons"
+                );
+
+
+            reasonsBox.innerHTML = "";
+
+
+            if (
+                !data.reasons ||
+                data.reasons.length === 0
+            ) {
+
+                reasonsBox.innerHTML =
+                    `<div class="reason safe">
+                        No suspicious behavior detected.
+                    </div>`;
+
+            }
+
+            else {
+
+                for (
+                    const reason of data.reasons
+                ) {
+
+                    const div =
+                        document.createElement(
+                            "div"
+                        );
+
+                    div.className =
+                        "reason";
+
+                    div.textContent =
+                        "⚠ " + reason;
+
+                    reasonsBox.appendChild(
+                        div
+                    );
+
+                }
+
+            }
+
+
+            /* -------------------------
+               RESPONSE
+            ------------------------- */
+
+            const responseTitle =
+                document.getElementById(
+                    "responseTitle"
+                );
+
+            const responseText =
+                document.getElementById(
+                    "responseText"
+                );
+
+
+            if (status === "CRITICAL") {
+
+                responseTitle.textContent =
+                    "🛡️ PROTECTION MODE ACTIVATED";
+
+                responseText.textContent =
+                    "Critical activity has been recorded and an incident report has been generated.";
+
+            }
+
+            else if (status === "SUSPICIOUS") {
+
+                responseTitle.textContent =
+                    "⚠️ MONITORING SUSPICIOUS ACTIVITY";
+
+                responseText.textContent =
+                    "RansomShield is continuing behavioral analysis.";
+
+            }
+
+            else {
+
+                responseTitle.textContent =
+                    "🟢 SYSTEM MONITORING";
+
+                responseText.textContent =
+                    "RansomShield is actively monitoring the protected environment.";
+
+            }
+
+
+            /* -------------------------
+               AFFECTED FILES
+            ------------------------- */
+
+            const filesBox =
+                document.getElementById(
+                    "affectedFiles"
+                );
+
+
+            filesBox.innerHTML = "";
+
+
+            const files =
+                data.affected_files || [];
+
+
+            if (files.length === 0) {
+
+                filesBox.innerHTML =
+                    `<div class="file">
+                        No affected files detected.
+                    </div>`;
+
+            }
+
+            else {
+
+                for (
+                    const file of files
+                ) {
+
+                    const div =
+                        document.createElement(
+                            "div"
+                        );
+
+                    div.className =
+                        "file";
+
+                    div.textContent =
+                        "📄 " + file;
+
+                    filesBox.appendChild(
+                        div
+                    );
+
+                }
+
+            }
+
+
+            /* -------------------------
+               TIMELINE
+            ------------------------- */
+
+            const normal =
+                document.getElementById(
+                    "timelineNormal"
+                );
+
+            const suspicious =
+                document.getElementById(
+                    "timelineSuspicious"
+                );
+
+            const critical =
+                document.getElementById(
+                    "timelineCritical"
+                );
+
+            const protection =
+                document.getElementById(
+                    "timelineProtection"
+                );
+
+
+            normal.style.opacity = "0.5";
+            suspicious.style.opacity = "0.5";
+            critical.style.opacity = "0.5";
+            protection.style.opacity = "0.5";
+
+
+            if (status === "MONITORING") {
+
+                normal.style.opacity = "1";
+
+            }
+
+            else if (status === "SUSPICIOUS") {
+
+                normal.style.opacity = "1";
+                suspicious.style.opacity = "1";
+
+            }
+
+            else if (status === "CRITICAL") {
+
+                normal.style.opacity = "1";
+                suspicious.style.opacity = "1";
+                critical.style.opacity = "1";
+                protection.style.opacity = "1";
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.log(
+                "Live status unavailable."
+            );
+
+        }
+
+    }
+
+
+    /* Update every second */
+
+    setInterval(
+        updateDashboard,
+        1000
+    );
+
+
+    /* Initial update */
+
+    updateDashboard();
+
+</script>
+
+</body>
+
+</html>
